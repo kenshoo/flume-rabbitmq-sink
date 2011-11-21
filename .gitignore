@@ -1,8 +1,8 @@
 /.gradle/*
 /.idea/*
-live-tracking.iml
-live-tracking.ipr
-live-tracking.iws
+*.iml
+*.ipr
+*.iws
 /build/*
 /out/*
 
