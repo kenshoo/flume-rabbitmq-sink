@@ -5,13 +5,17 @@ sourceCompatibility = 1.6
 version = '1.0'
 
 ideaProject {
-   javaVersion = '1.6'
+   jdkName = '1.6'
+}
+
+repositories {
+    mavenCentral()
+    mavenRepo url: "https://repository.cloudera.com/artifactory/cloudera-repos/"
 }
 
 dependencies {
 
-    runtime group: 'com.kenshoo', name: 'messages-listener', version: '1.0.3-SNAPSHOT'
-    compile (group: 'com.cloudera.flume', name: 'flume-core', version: '0.9.4') {
+    compile (group: 'com.cloudera', name: 'flume-core', version: '0.9.4-cdh3u2') {
         transitive = false
     }
     compile group: 'commons-io', name: 'commons-io' , version: '1.2'
@@ -21,6 +25,7 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.8.2'
     testCompile group: 'org.jmock', name: 'jmock-junit4', version: '2.5.1'
+    testRuntime group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.4'
 }
 
 
