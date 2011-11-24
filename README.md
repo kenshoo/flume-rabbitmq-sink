@@ -11,6 +11,7 @@ The RabbitMQ's host, user and password are all configurable as well.
 This project uses [gradle](http://www.gradle.org/) as its build tool.
 
 Steps:
+
 1. Clone the repository.
 2. Run "gradle build" from the project's root dir.
 3. Copy rabbit-sink-{ver}.jar from build/libs directory to the flume master and
