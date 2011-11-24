@@ -1,25 +1,25 @@
 # Flume RabbitMQ sink
 A custom [Flume](https://github.com/cloudera/flume) sink that integrates
-between flume and [rabbit-mq](http://www.rabbitmq.com/). 
+between flume and [RabbitMQ](http://www.rabbitmq.com/). 
 
 ## How it works
-the rabbit-mq sink sends each event it receives to a queue, the queue name can
-be determined using a parameter in the event's metadata map.
-the rabbit-mq host, user and password can be configured as well.
+The sink sends each Flume event received to a RabbitMQ queue. The queue name is
+determined by a parameter in the event's metadata map.
+The RabbitMQ's host, user and password are all configurable as well.
 
 ## Usage
-This project uses [gradle](http://www.gradle.org/) as build tool
+This project uses [gradle](http://www.gradle.org/) as its build tool.
 
-1. Clone the repository
-2. run "gradle build" from the project root dir
-3. copy rabbit-sink-{ver}.jar from build/libs directory to flume master and
-node classpath dir
-4. add com.kenshoo.flume.rabbitmq.RabbitMqSink to flume-site.xml plugins
+Steps:
+1. Clone the repository.
+2. Run "gradle build" from the project's root dir.
+3. Copy rabbit-sink-{ver}.jar from build/libs directory to the flume master and
+node classpath dir.
+4. Add com.kenshoo.flume.rabbitmq.RabbitMqSink to flume-site.xml plugins
 section on the master node.
-5. (re)start master node and verify RabbitSink is in the plugins list
-6. on the collector sink configuration, add rabbitsink('host','user','pass')
+5. (Re)start the master node and verify that RabbitSink is part of the plugins list.
+6. On the collector-sink's configuration, add rabbitsink('host','user','pass').
 
 ## License
-
 This code is released under the Apache Public License 2.0.
 
