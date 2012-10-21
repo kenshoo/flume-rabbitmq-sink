@@ -33,11 +33,11 @@ public class SimpleRabbitMqProducer implements QueuePublisher {
     private Connection conn;
     private Channel channel;
 
-    public SimpleRabbitMqProducer(String host, String userName, String password) {
+    public SimpleRabbitMqProducer(String host, String userName, String password, String virtualHost) {
         factory = new ConnectionFactory();
         factory.setUsername(userName);
         factory.setPassword(password);
-        factory.setVirtualHost("/");
+        factory.setVirtualHost(virtualHost);
         factory.setHost(host);
         factory.setPort(5672);
     }

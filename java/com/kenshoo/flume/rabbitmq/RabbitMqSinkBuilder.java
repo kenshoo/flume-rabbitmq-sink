@@ -30,11 +30,12 @@ class RabbitMqSinkBuilder extends SinkFactory.SinkBuilder {
     @Override
     public EventSink build(Context context, String... args) {
         if (!(args.length >= 1) )
-		throw new IllegalArgumentException("Missing arguments: queue host,[queue-domain=\"\"],[username=\"guest\"],[password=\"guest\"]");
+		    throw new IllegalArgumentException("Missing arguments: queue host,[username=\"guest\"],[password=\"guest\"],[virtualhost=\"\\\"]");
         String publisher = args[0];
-        String queueDomain = args.length >= 2 ? args[1] : "";
-	String userName = args.length>=3? args[2]: "guest";
-	String password = args.length>=4? args[3]: "guest";
-        return new RabbitMqSink(new SimpleRabbitMqProducer(publisher, userName, password),queueDomain);
+        String userName = args.length>=2? args[1]: "guest";
+        String password = args.length>=3? args[2]: "guest";
+        String virtualHost = args.length>=4? args[3]: "/" ;
+
+        return new RabbitMqSink(new SimpleRabbitMqProducer(publisher, userName, password, virtualHost));
     }
 }

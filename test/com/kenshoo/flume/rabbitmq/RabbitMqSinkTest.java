@@ -56,22 +56,13 @@ public class RabbitMqSinkTest {
         publisher = context.mock(QueuePublisher.class);
         sink = new RabbitMqSink(publisher);
         event = new EventStub(MSG_BODY);
-        event.set("host",QUEUE_NAME.getBytes());
+        event.set("host", QUEUE_NAME.getBytes());
     }
 
     @Test
     public void publishesMessageBodyToCorrectQueue() throws IOException {
         context.checking(new Expectations(){{
             oneOf(publisher).publish(QUEUE_NAME,MSG_BODY.getBytes());
-        }});
-        sink.append(event);
-    }
-
-    @Test
-    public void appendsPrefixToQueueNameIfGiven() throws IOException {
-        sink = new RabbitMqSink(publisher,"queue.prefix");
-        context.checking(new Expectations(){{
-            oneOf(publisher).publish("queue.prefix." + QUEUE_NAME,MSG_BODY.getBytes());
         }});
         sink.append(event);
     }
