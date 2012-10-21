@@ -62,7 +62,7 @@ jar {
     baseName = "rabbit-sink"
 }
 
-task ('dist', dependsOn: check, type: Zip) {
+task ('dist', dependsOn: jar, type: Zip) {
     baseName = 'ken-rabbitmq-sink'
     from jar.outputs.files
     from configurations.compile {
