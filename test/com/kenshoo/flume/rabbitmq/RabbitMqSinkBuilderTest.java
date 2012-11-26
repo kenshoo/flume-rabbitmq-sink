@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -28,8 +29,9 @@ public class RabbitMqSinkBuilderTest {
     private String password = System.getProperty("RABBIT_PASSWORD","guest");
     private String vhost = System.getProperty("RABBIT_VHOST","/");
     private Connection connection;
-    private String queueName = "1001";
+
     private Channel channel;
+    private String ksNumber = "1001";
 
     @Before
     public void setupQueue() throws IOException {
@@ -40,11 +42,12 @@ public class RabbitMqSinkBuilderTest {
         connectionFactory.setVirtualHost(vhost);
         connection = connectionFactory.newConnection();
         channel = connection.createChannel();
-//        channel.queueDeclare(queueName, false, false, true, null);
+        channel.exchangeDeclare(SimpleRabbitMqProducer.EXCHANGE_NAME, "direct", true);
+
     }
 
     @Test
-    public void sinkBuilderTest() throws IOException, InterruptedException {
+    public void verifyMessageRoutedToQueue() throws IOException, InterruptedException {
         RabbitMqSinkBuilder builder = new RabbitMqSinkBuilder();
         Context context=null;
         EventSink sink = builder.build(context, host, username, password, vhost);
@@ -52,8 +55,9 @@ public class RabbitMqSinkBuilderTest {
             sink.open();
             final String msgBody = "message body";
             Event event = new EventStub(msgBody);
-
-            event.set("host", queueName.getBytes());
+            String queueName = channel.queueDeclare().getQueue();
+            channel.queueBind(queueName, SimpleRabbitMqProducer.EXCHANGE_NAME,ksNumber);
+            event.set("host", ksNumber.getBytes());
             sink.append(event);
             QueueingConsumer consumer = new QueueingConsumer(channel);
             channel.basicConsume(queueName, true, consumer);
@@ -66,8 +70,34 @@ public class RabbitMqSinkBuilderTest {
 
     }
 
+    @Test
+    public void verifyMessageNotReceived() throws IOException, InterruptedException {
+        RabbitMqSinkBuilder builder = new RabbitMqSinkBuilder();
+        Context context=null;
+        EventSink sink = builder.build(context, host, username, password, vhost);
+        try{
+            sink.open();
+            final String msgBody = "message body";
+            Event event = new EventStub(msgBody);
+            String queueName = channel.queueDeclare().getQueue();
+            channel.queueBind(queueName, SimpleRabbitMqProducer.EXCHANGE_NAME,"nonexistent-queue");
+            event.set("host", ksNumber.getBytes());
+            sink.append(event);
+            QueueingConsumer consumer = new QueueingConsumer(channel);
+            channel.basicConsume(queueName, true, consumer);
+            QueueingConsumer.Delivery delivery = consumer.nextDelivery(100);
+            assertNull(delivery);
+        }
+        finally{
+            sink.close();
+        }
+
+    }
+
+
     @After
     public void disconnect() throws IOException {
+        channel.exchangeDelete(SimpleRabbitMqProducer.EXCHANGE_NAME, false);
         channel.close();
         connection.close();
     }

@@ -32,6 +32,7 @@ public class SimpleRabbitMqProducer implements QueuePublisher {
     private ConnectionFactory factory;
     private Connection conn;
     private Channel channel;
+    public static final String EXCHANGE_NAME = "app.tracking.exchange";
 
     public SimpleRabbitMqProducer(String host, String userName, String password, String virtualHost) {
         factory = new ConnectionFactory();
@@ -52,8 +53,8 @@ public class SimpleRabbitMqProducer implements QueuePublisher {
         conn.close();
     }
 
-    public void publish(String queueName, byte[] msg) throws IOException {
-        channel.queueDeclare(queueName, false, false, false, null);
-        channel.basicPublish("", queueName, MessageProperties.TEXT_PLAIN, msg);
+    public void publish(String routingKey, byte[] msg) throws IOException {
+        channel.exchangeDeclare(EXCHANGE_NAME, "direct", true);
+        channel.basicPublish(EXCHANGE_NAME, routingKey, MessageProperties.TEXT_PLAIN, msg);
     }
 }
