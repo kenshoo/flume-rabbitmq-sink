@@ -46,7 +46,7 @@ public class RabbitMqSink extends EventSink.Base {
 
     @Override
     public void append(Event e) throws IOException {
-        logger.debug("received message: {}", e);
+        logger.info("received message: {}", e);
         String queueName = extractTragetQueueName(e);
         rabbitMqProducer.publish(queueName,e.getBody());
     }
