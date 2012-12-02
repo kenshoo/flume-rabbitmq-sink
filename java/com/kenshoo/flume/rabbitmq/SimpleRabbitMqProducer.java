@@ -49,7 +49,7 @@ public class SimpleRabbitMqProducer implements QueuePublisher {
     public void open() throws IOException {
         conn = factory.newConnection();
         channel = conn.createChannel();
-        logger.info("channel created successfully");
+        logger.debug("channel created successfully");
     }
 
     public void close() throws IOException {
@@ -58,8 +58,7 @@ public class SimpleRabbitMqProducer implements QueuePublisher {
     }
 
     public void publish(String routingKey, byte[] msg) throws IOException {
-        channel.exchangeDeclare(EXCHANGE_NAME, "direct", true);
         channel.basicPublish(EXCHANGE_NAME, routingKey, MessageProperties.TEXT_PLAIN, msg);
-        logger.info ("published successfully: {} with key: {}",new String(msg), routingKey );
+        logger.debug ("published successfully with key: {}",routingKey );
     }
 }
