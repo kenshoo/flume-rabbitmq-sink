@@ -19,6 +19,8 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.MessageProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -33,6 +35,7 @@ public class SimpleRabbitMqProducer implements QueuePublisher {
     private Connection conn;
     private Channel channel;
     public static final String EXCHANGE_NAME = "app.tracking.exchange";
+    private static final Logger logger = LoggerFactory.getLogger(SimpleRabbitMqProducer.class);
 
     public SimpleRabbitMqProducer(String host, String userName, String password, String virtualHost) {
         factory = new ConnectionFactory();
@@ -46,6 +49,7 @@ public class SimpleRabbitMqProducer implements QueuePublisher {
     public void open() throws IOException {
         conn = factory.newConnection();
         channel = conn.createChannel();
+        logger.debug("channel created successfully");
     }
 
     public void close() throws IOException {
@@ -56,5 +60,6 @@ public class SimpleRabbitMqProducer implements QueuePublisher {
     public void publish(String routingKey, byte[] msg) throws IOException {
         channel.exchangeDeclare(EXCHANGE_NAME, "direct", true);
         channel.basicPublish(EXCHANGE_NAME, routingKey, MessageProperties.TEXT_PLAIN, msg);
+        logger.debug("published successfully: {} with key: {}",new String(msg), routingKey );
     }
 }

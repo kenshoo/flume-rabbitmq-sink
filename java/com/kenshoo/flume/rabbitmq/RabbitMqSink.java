@@ -19,6 +19,8 @@ import com.cloudera.flume.conf.SinkFactory.SinkBuilder;
 import com.cloudera.flume.core.Event;
 import com.cloudera.flume.core.EventSink;
 import com.cloudera.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +31,9 @@ import java.util.List;
  * Pre condition - the incoming event has a "host" header containing the rabbitmq queue name.
  */
 public class RabbitMqSink extends EventSink.Base {
+
     private QueuePublisher rabbitMqProducer;
+    private static final Logger logger = LoggerFactory.getLogger(RabbitMqSink.class);
 
     public RabbitMqSink(QueuePublisher publisher) {
         this.rabbitMqProducer = publisher;
@@ -42,6 +46,7 @@ public class RabbitMqSink extends EventSink.Base {
 
     @Override
     public void append(Event e) throws IOException {
+        logger.debug("received message: {}", e);
         String queueName = extractTragetQueueName(e);
         rabbitMqProducer.publish(queueName,e.getBody());
     }
