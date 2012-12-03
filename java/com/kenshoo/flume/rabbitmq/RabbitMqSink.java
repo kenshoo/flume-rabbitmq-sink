@@ -33,7 +33,7 @@ import java.util.List;
 public class RabbitMqSink extends EventSink.Base {
 
     private QueuePublisher rabbitMqProducer;
-    private static final Logger logger = LoggerFactory.getLogger(RabbitMqSink.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RabbitMqSink.class);
 
     public RabbitMqSink(QueuePublisher publisher) {
         this.rabbitMqProducer = publisher;
@@ -46,7 +46,7 @@ public class RabbitMqSink extends EventSink.Base {
 
     @Override
     public void append(Event e) throws IOException {
-        logger.debug("received message: {}", e);
+        LOG.debug("received message: {}", e);
         String queueName = extractTragetQueueName(e);
         rabbitMqProducer.publish(queueName,e.getBody());
     }
