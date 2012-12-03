@@ -85,15 +85,6 @@ sourceSets {
   }
 }
 
-task ('dist', dependsOn: jar, type: Zip) {
-    baseName = 'ken-rabbitmq-sink'
-    from jar.outputs.files
-    from configurations.compile {
-        transitive = false
-        exclude '*flume*'
-    }
-}
-
 tasks.withType(Test) { systemProperties = System.getProperties() }
 
 idea.project.ipr {
