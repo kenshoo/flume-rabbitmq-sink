@@ -15,10 +15,7 @@
 */  
 package com.kenshoo.flume.rabbitmq;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.MessageProperties;
+import com.rabbitmq.client.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,18 +33,19 @@ public class SimpleRabbitMqProducer implements QueuePublisher {
     private Channel channel;
     public static final String EXCHANGE_NAME = "app.tracking.exchange";
     private static final Logger logger = LoggerFactory.getLogger(SimpleRabbitMqProducer.class);
+    private String hosts;
 
-    public SimpleRabbitMqProducer(String host, String userName, String password, String virtualHost) {
+    public SimpleRabbitMqProducer(String hosts, String userName, String password, String virtualHost) {
         factory = new ConnectionFactory();
         factory.setUsername(userName);
         factory.setPassword(password);
         factory.setVirtualHost(virtualHost);
-        factory.setHost(host);
         factory.setPort(5672);
+        this.hosts = hosts;
     }
 
     public void open() throws IOException {
-        conn = factory.newConnection();
+        conn = factory.newConnection(Address.parseAddresses(hosts));
         channel = conn.createChannel();
         logger.debug("channel created successfully");
     }
