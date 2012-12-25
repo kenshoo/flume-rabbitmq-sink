@@ -55,13 +55,13 @@ public class SimpleRabbitMqProducer implements QueuePublisher {
             channel.close();
         }
         catch (Exception ex) {
-            logger.warn("exception when closing channel: %s", ex.getMessage());
+            logger.warn("exception when closing channel, ", ex);
         }
         try{
             conn.close();
         }
         catch (Exception ex) {
-            logger.warn("exception closing connection: %s", ex.getMessage());
+            logger.warn("exception closing connection, ", ex);
         }
     }
 
