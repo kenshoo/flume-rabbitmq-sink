@@ -51,8 +51,18 @@ public class SimpleRabbitMqProducer implements QueuePublisher {
     }
 
     public void close() throws IOException {
-        channel.close();
-        conn.close();
+        try{
+            channel.close();
+        }
+        catch (Exception ex) {
+            logger.warn("exception when closing channel: %s", ex.getMessage());
+        }
+        try{
+            conn.close();
+        }
+        catch (Exception ex) {
+            logger.warn("exception closing connection: %s", ex.getMessage());
+        }
     }
 
     public void publish(String routingKey, byte[] msg) throws IOException {
