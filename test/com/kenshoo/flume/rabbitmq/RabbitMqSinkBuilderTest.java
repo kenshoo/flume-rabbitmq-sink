@@ -36,11 +36,10 @@ public class RabbitMqSinkBuilderTest {
     @Before
     public void setupQueue() throws IOException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost(host);
         connectionFactory.setUsername(username);
         connectionFactory.setPassword(password);
         connectionFactory.setVirtualHost(vhost);
-        connection = connectionFactory.newConnection();
+        connection = connectionFactory.newConnection(Address.parseAddresses(host));
         channel = connection.createChannel();
         channel.exchangeDeclare(SimpleRabbitMqProducer.EXCHANGE_NAME, "direct", true);
 
