@@ -24,6 +24,10 @@ ideaProject {
    jdkName = '1.6'
 }
 
+configurations{
+    providedCompile
+}
+
 buildscript {
     repositories {
         mavenCentral()
@@ -50,15 +54,14 @@ repositories {
 
 dependencies {
 
-    compile (group: 'com.cloudera', name: 'flume-core', version: '0.9.4-cdh3u2') {
+    providedCompile (group: 'com.cloudera', name: 'flume-core', version: '0.9.4-cdh3u2') {
         transitive = false
     }
-
     compile group: 'commons-io', name: 'commons-io' , version: '1.2'
     compile group: 'commons-cli', name: 'commons-cli' , version: '1.1'
 
     compile group: 'com.rabbitmq', name: 'amqp-client' , version: '2.5.1'
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.6.4'
+    providedCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.6.4'
 
     compile group: 'commons-lang', name: 'commons-lang' , version: '2.3'
 
@@ -67,9 +70,11 @@ dependencies {
     testRuntime group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.4'
 }
 
+sourceSets.main.compileClasspath += configurations.providedCompile
+sourceSets.test.compileClasspath += configurations.providedCompile
+
 fatJar {
     exclude 'org/slf4j/*'
-    exclude 'com/cloudera/*'
 }
 sourceSets {
   main {
