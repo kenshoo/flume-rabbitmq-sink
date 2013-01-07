@@ -66,7 +66,7 @@ public class SimpleRabbitMqProducer implements QueuePublisher {
     }
 
     public void publish(String routingKey, byte[] msg) throws IOException {
-        channel.basicPublish(EXCHANGE_NAME, routingKey, MessageProperties.TEXT_PLAIN, msg);
+        channel.basicPublish(EXCHANGE_NAME, routingKey, MessageProperties.PERSISTENT_TEXT_PLAIN, msg);
         logger.debug ("published successfully with key: {}",routingKey );
     }
 }
