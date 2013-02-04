@@ -96,3 +96,5 @@ idea.project.ipr {
 }
 
 build.dependsOn fatJar
+
+
