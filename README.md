@@ -1,6 +1,5 @@
 # Flume RabbitMQ sink
-A custom [Flume](https://github.com/cloudera/flume) sink that integrates
-between flume and [RabbitMQ](http://www.rabbitmq.com/). 
+A custom [Flume](https://github.com/cloudera/flume) sink that integrates flume and [RabbitMQ](http://www.rabbitmq.com/). 
 
 ## How it works
 The sink sends each Flume event received to a RabbitMQ queue. The queue name is
