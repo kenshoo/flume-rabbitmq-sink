@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.applet.Applet;
 
 /**
  * A flume sink implementation for routing messages into rabbitmq queues.
@@ -65,6 +66,11 @@ public class RabbitMqSink extends EventSink.Base {
 
     private static SinkBuilder builder() {
         return new RabbitMqSinkBuilder();
+    }
+
+    @Override
+    public int hashCode(){
+        return 0;
     }
 
   /**
